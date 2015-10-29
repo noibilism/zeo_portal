@@ -144,10 +144,48 @@ class SchoolsController extends AppController {
 
     }
 
-    public function getEnrolmentByClass($class_id){
+    public function getSchoolEnrolmentsByTypeGender($type_id, $sex, $session = null){
 
-        $cur_session = $this->SchSession->getCurrentSession();
-        $enrolment = $this->StdEnrolment->getEnrolmentByClass($class_id, $cur_session['SchSession']['id']);
+        if(!isset($session)){
+            $ses_ = $this->SchSession->getCurrentSession();
+            $ses = $ses_['SchSession']['id'];
+        }else{
+            $ses = $session;
+        }
+        $enrolment = $this->StdEnrolment->getSchoolEnrolmentsByTypeGender($type_id, $ses, $sex);
+        return $enrolment;
+
+    }
+
+    public function getSchoolEnrolmentsBySession($school_id, $session_id){
+
+        $enrolment = $this->StdEnrolment->getSchoolEnrolmentsBySession($school_id, $session_id);
+        return $enrolment;
+
+    }
+
+    public function getEnrolmentByClass($class_id, $session = null){
+
+        if(!isset($session)){
+            $ses_ = $this->SchSession->getCurrentSession();
+            $ses = $ses_['SchSession']['id'];
+        }else{
+            $ses = $session;
+        }
+        $enrolment = $this->StdEnrolment->getEnrolmentByClass($class_id, $ses);
+        return $enrolment;
+
+    }
+
+    public function getEnrolmentByClassGender($class_id, $sex, $session = null){
+
+        if(!isset($session)){
+            $ses_ = $this->SchSession->getCurrentSession();
+            $ses = $ses_['SchSession']['id'];
+        }else{
+            $ses = $session;
+        }
+        $enrolment = $this->StdEnrolment->getEnrolmentByClassGender($class_id, $ses,$sex);
         return $enrolment;
 
     }
