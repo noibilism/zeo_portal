@@ -1,89 +1,82 @@
 <?php
 
-class ExaminationsController extends AppController {
+class EnrolmentsController extends AppController {
 
-	public $uses = array('SchoolType', 'School', 'User', 'Address', 'SchoolProperty', 'SchoolStaff', 'SchoolPayment', 'Exam', 'SchSession');
-	
+    public $uses = array('SchoolType', 'School', 'SchClass','Student','User', 'Address', 'SchSession','SchoolProperty', 'SchoolStaff', 'SchoolPayment', 'StdEnrolment');
+    public $components = array('ExcelReader', 'Resources');
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('login','add'); 
     }
 
-    public function all_exams(){
-        $allowed = array(1);
-        $this->check_access($allowed);
-        $exams = $this->Exam->find('all', array('conditions'=>array('Exam.deleted'=>0)));
-        $this->set('exams', $exams);
-    }
+    public function new_enrolment(){
 
-    public function add_exam() {
-        $allowed = array(1);
-        $this->check_access($allowed);
-        $sch_session = $this->SchSession->find('list');
-        $this->set('ses', $sch_session);
-        if ($this->request->is('post')) {
-            $this->Exam->create();
-            if ($this->Exam->save($this->request->data)) {
-                $this->Session->setFlash(__('The Exam has been created!'));
-                $this->redirect(array('action' => 'all_exams'));
-            } else {
-                $this->Session->setFlash(__('The Exam could not be created. Please, try again.'));
+        $classes = $this->SchClass->find('list');
+        $curr_session = $this->SchSession->getCurrentSession();
+        $this->set('classes', $classes);
+        $this->set('curr_session', $curr_session['SchSession']['name']);
+        if(!empty($this->request->data)){
+            $i_file = $this->request->data['Enrolment']['file'];
+            $filename = $i_file['name'];
+            $type = $i_file['type'];
+            $user_id = $this->Auth->user('id');
+            $basic = $this->School->findByUserId($user_id);
+            $sch_id = $basic['School']['id'];
+            $sch_type = $basic['School']['school_type_id'];
+            if($type !== 'application/octet-stream'){
+                $this->Session->setFlash(__('Sorry you can only upload Excel Files in the format .xls'));
+                $this->redirect($this->referer());
             }
-        }
-    }
-
-    public function update_exam($id = null) {
-        $allowed = array(1);
-        $this->check_access($allowed);
-        $sch_session = $this->SchSession->find('list');
-        $this->set('ses', $sch_session);
-        if (!$id) {
-            $this->Session->setFlash('Please provide an Exam id');
-            $this->redirect(array('action'=>'all_exams'));
-        }
-
-        $user = $this->Exam->findById($id);
-        if (!$user) {
-            $this->Session->setFlash('Invalid Exam ID Provided');
-            $this->redirect(array('action'=>'all_exams'));
-        }
-
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->Exam->id = $id;
-            if ($this->Exam->save($this->request->data)) {
-                $this->Session->setFlash(__('The Exam has been updated'));
-                $this->redirect(array('action' => 'all_exams'));
-            }else{
-                $this->Session->setFlash(__('Unable to update your Exam.'));
+            $permitted = array('application/octet-stream');
+            $this->Resources->uploadFiles('files', $i_file, $itemId = null, $permitted);
+            $file = WWW_ROOT . 'files/' .$filename;
+            $this->set('filename', $file);
+            $data = $this->ExcelReader->loadExcelFile($file);
+            $data_count = count($data);
+            $real_data = $data_count - 1;
+            for($i = 1; $i < $data_count; $i++){
+                $pin = $data[$i][0];
+                $student = $this->Student->findByPin($pin);
+                $check_duplicate = $this->check_duplicate_enrolment($student['Student']['id'], $curr_session['SchSession']['id']);
+                if(empty($student)){
+                    unlink($file);
+                    $this->Session->setFlash(__($pin.' Incorrect on Row '.$i));
+                    $this->redirect($this->referer());
+                }elseif($student['Student']['name'] !== $data[$i][1]){
+                    unlink($file);
+                    $this->Session->setFlash(__(' The portal identification number '.$pin.' doesnot match the name '.$data[$i][1].' on Row '.$i));
+                    $this->redirect($this->referer());
+                }elseif(!empty($check_duplicate)){
+                    unlink($file);
+                    $this->Session->setFlash(__(' The student with portal identification number '.$pin.' and the name '.$data[$i][1].' has been enroled before.Please check Row '.$i));
+                    $this->redirect($this->referer());
+                }
+                $this->request->data['StdEnrolment']['student_id'] = $student['Student']['id'];
+                $this->request->data['StdEnrolment']['sex'] = $student['Student']['sex'];
+                $this->request->data['StdEnrolment']['session_id'] = $curr_session['SchSession']['id'];
+                $this->request->data['StdEnrolment']['class_id'] = $this->request->data['Enrolment']['class_id'];
+                $this->request->data['StdEnrolment']['year'] = date('Y');
+                $this->request->data['StdEnrolment']['added_by'] = $user_id;
+                $this->request->data['StdEnrolment']['school_id'] = $sch_id;
+                $this->request->data['StdEnrolment']['school_type_id'] = $sch_type;
+                $this->StdEnrolment->saveAll($this->request->data);
             }
+            unlink($file);
+            $this->Session->setFlash(__($real_data.' Uploads Successful!'));
+            $this->redirect(array('action' => 'school_enrolments'));
         }
 
-        if (!$this->request->data) {
-            $this->request->data = $user;
-        }
     }
 
-    public function delete_exams($id = null) {
-        $allowed = array(1);
-        $this->check_access($allowed);
-        if (!$id) {
-            $this->Session->setFlash('Please provide an Exam id');
-            $this->redirect(array('action'=>'all_exams'));
-        }
-
-        $this->Exam->id = $id;
-        if (!$this->Exam->exists()) {
-            $this->Session->setFlash('Invalid Exam id provided');
-            $this->redirect(array('action'=>'all_exams'));
-        }
-        if ($this->Exam->saveField('deleted', 1)) {
-            $this->Session->setFlash(__('Exam deleted'));
-            $this->redirect(array('action' => 'all_exams'));
-        }
-        $this->Session->setFlash(__('Exam was not deleted'));
-        $this->redirect(array('action' => 'all_exams'));
+    public function check_duplicate_enrolment($student_id, $session){
+        $result = $this->StdEnrolment->findByStudentIdAndSessionId($student_id, $session);
+        return $result;
     }
 
+    public function school_enrolments(){
+        $sch_sessions = $this->SchSession->find('all');
+    }
 }
 
 ?>
