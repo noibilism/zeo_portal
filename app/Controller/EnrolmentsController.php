@@ -74,8 +74,79 @@ class EnrolmentsController extends AppController {
         return $result;
     }
 
-    public function school_enrolments(){
+    public function school_enrolments($session_id = null){
+        if(!$session_id){
+            $ses = $this->SchSession->getCurrentSession();
+        }else{
+            $ses = $session_id;
+        }
         $sch_sessions = $this->SchSession->find('all');
+        $classes = $this->SchClass->find('all');
+        $this->set('sch_sessions', $sch_sessions);
+        $this->set('classes', $classes);
+        $this->set('ses', $ses);
+    }
+
+    public function view_class_enrolled_students($class_id){
+        $session_id = $this->SchSession->getCurrentSession();
+        $students = $this->StdEnrolment->getEnrolmentByClass($class_id, $session_id['SchSession']['id']);
+        if(!$class_id){
+            $this->Session->setFlash(__(' Invalid Class ID!'));
+            $this->redirect($this->referer());
+        }
+        $c_name = $this->getClassName();
+        $s_name = $this->getSchoolName();
+        $st_name = $this->getStudentName();
+        $this->set('students', $students);
+        $this->set('class_name', $c_name);
+        $this->set('school_name', $s_name);
+        $this->set('student_name', $st_name);
+    }
+
+    public function delete_enrolment($id){
+        if(!$id){
+            $this->Session->setFlash(__(' Invalid Enrolment ID!'));
+            $this->redirect($this->referer());
+        }else{
+            $this->StdEnrolment->delete($id);
+            $this->Session->setFlash(__(' Deletion Successful!'));
+            $this->redirect($this->referer());
+        }
+    }
+
+    public function update_enrolment($id){
+        if(!$id){
+            $this->Session->setFlash(__(' Invalid Enrolment ID!'));
+            $this->redirect($this->referer());
+        }
+        $std_id = $this->StdEnrolment->findById($id);
+        $std_name = $this->getStudentName();
+        $session_id = $this->SchSession->getCurrentSession();
+        $classes = $this->SchClass->find('list');
+        $this->set('classes', $classes);
+        $this->set('std_name', $std_name[$std_id['StdEnrolment']['student_id']]);
+        $this->set('curr_session', $session_id['SchSession']['id']);
+        if(!empty($this->request->data)){
+            $this->StdEnrolment->id = $id;
+            $this->StdEnrolment->save($this->request->data);
+            $this->Session->setFlash(__('Updated Successfully!'));
+            $this->redirect($this->referer());
+        }else{
+            $this->request->data = $this->StdEnrolment->findById($id);
+        }
+    }
+
+    public function enrolment_sessions($school_id = null){
+        $sch_sess = $this->SchSession->find('all');
+        $user_id = $this->Auth->user('id');
+        $basic = $this->School->findByUserId($user_id);
+        $sch_id = $basic['School']['id'];
+        $this->set('sch_sess', $sch_sess);
+        $this->set('sch_id', $sch_id);
+    }
+
+    public function view_session_enrolments($session_id){
+
     }
 }
 

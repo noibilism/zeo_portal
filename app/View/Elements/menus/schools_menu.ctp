@@ -15,13 +15,13 @@
         </li>-->
         <li class="nav-main-heading"><span class="sidebar-mini-hide">Enrolments</span></li>
         <li>
-            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-wrench"></i><span class="sidebar-mini-hide">Sessional Enrolments</span></a>
+            <a class="nav-submenu" data-toggle="nav-submenu" href="/zeo_portal/Enrolments/school_enrolments"><i class="si si-wrench"></i><span class="sidebar-mini-hide">Sessional Enrolments</span></a>
         </li>
         <li>
-            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">New Sessional Enrolments</span></a>
+            <a class="nav-submenu" data-toggle="nav-submenu" href="/zeo_portal/Enrolments/new_enrolment"><span class="sidebar-mini-hide">New Sessional Enrolment</span></a>
         </li>
         <li>
-            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">Bulk Sessional Enrolments</span></a>
+            <a class="nav-submenu" data-toggle="nav-submenu" href="/zeo_portal/Enrolments/enrolment_sessions"><span class="sidebar-mini-hide">View Enrolment History</span></a>
         </li>
         <li>
             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-magic-wand"></i><span class="sidebar-mini-hide">Exam Enrolments</span></a>

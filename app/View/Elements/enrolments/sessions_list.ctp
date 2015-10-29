@@ -1,7 +1,7 @@
 
 <div class="block">
 <div class="block-header">
-    <button class="btn btn-success push-5-r push-10" type="button">    <?php echo $this->Html->link(__('Add Session'), array('plugin' => false, 'controller' => 'users', 'action' => 'add_session'), array('escape' => false)); ?>
+    <button class="btn btn-success push-5-r push-10" type="button">    <?php echo $this->Html->link(__('New Enrolment'), array('plugin' => false, 'controller' => 'Enrolments', 'action' => 'new_enrolment'), array('escape' => false)); ?>
     </button>
     <h3 class="block-title">All Sessions</h3>
 </div>
@@ -20,6 +20,7 @@
     <th class="hidden-xs">Current Session</th>
     <th class="hidden-xs" style="width: 15%;">Enrolment Start Date</th>
     <th class="hidden-xs" style="width: 15%;">Enrolment End Date</th>
+    <th class="hidden-xs" style="width: 15%;">No of Students Enrolled</th>
     <th class="text-center" style="width: 10%;">Actions</th>
 </tr>
 </thead>
@@ -35,14 +36,14 @@
     <td class="hidden-xs"><?php if($c_s == 1){ echo 'Yes'; }else{ echo 'No'; }  ?></td>
     <td class="hidden-xs"><?php echo $this->Time->niceShort($ses['SchSession']['enrolment_start']); ?></td>
     <td class="hidden-xs"><?php echo $this->Time->niceShort($ses['SchSession']['enrolment_stop']); ?></td>
-    <?php if($role == 1){ ?>
+    <td><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getSchoolEnrolmentsBySession',$sch_id, $ses['SchSession']['id']))); ?></td>
     <td class="text-center">
         <div class="btn-group">
             <?php if($role == 1){ ?>
             <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Edit Session"><?php echo $this->Html->image('edit.png', array('url' => array('controller'=>'users', 'action'=>'update_session',$ses['SchSession']['id']))); ?></button>
             <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove Session"><?php echo $this->Html->image('del.png', array('url' => array('controller'=>'users', 'action'=>'delete_session',$ses['SchSession']['id']))); ?></button>
             <?php }else{ ?>
-            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove Session"><?php echo $this->Html->image('enrol.png', array('url' => array('controller'=>'enrolments', 'action'=>'view_enrolments',$ses['SchSession']['id']))); ?></button>
+            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove Session"><?php echo $this->Html->image('enrol.png', array('url' => array('controller'=>'enrolments', 'action'=>'school_enrolments',$ses['SchSession']['id']))); ?></button>
             <?php } ?>
         </div>
     </td>

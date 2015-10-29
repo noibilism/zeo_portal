@@ -46,7 +46,7 @@ class AppController extends Controller {
 			'loginError' => 'Invalid Username or Password entered, please try again.'
  
         ));
-	public $uses = array('Role', 'School');
+	public $uses = array('Role', 'School','Student','StdClass','SchSession');
 	// only allow the login controllers only
 	public function beforeFilter() {
         $this->Auth->allow('login');
@@ -107,5 +107,30 @@ class AppController extends Controller {
         }
         return $no;
     }
+
+    public function getSchoolName(){
+        $name = null;
+        $orderBy = array('School.name');
+        $name = $this->School->find('list', array('order'=>$orderBy, 'fields' => array('School.name')));
+        if (!$name) $name=array();
+        return $name;
+    }
+
+    public function getClassName(){
+        $name = null;
+        $orderBy = array('SchClass.name');
+        $name = $this->SchClass->find('list', array('order'=>$orderBy, 'fields' => array('SchClass.name')));
+        if (!$name) $name=array();
+        return $name;
+    }
+
+    public function getStudentName(){
+        $name = null;
+        $orderBy = array('Student.name');
+        $name = $this->Student->find('list', array('order'=>$orderBy, 'fields' => array('Student.name')));
+        if (!$name) $name=array();
+        return $name;
+    }
+
 	
 }

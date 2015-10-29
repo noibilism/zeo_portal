@@ -95,9 +95,30 @@ class StdEnrolment extends AppModel {
 
     }
 
+    function getSchoolEnrolmentsByTypeGender($school_type_id, $session_id, $sex){
+
+        $result = $this->find('all', array('conditions'=>array('StdEnrolment.school_type_id'=>$school_type_id, 'StdEnrolment.session_id'=>$session_id, 'StdEnrolment.sex'=>$sex)));
+        return $result;
+
+    }
+
     function getEnrolmentByClass($class_id, $session_id){
 
         $result = $this->find('all', array('conditions'=>array('StdEnrolment.class_id'=>$class_id, 'StdEnrolment.session_id'=>$session_id)));
+        return $result;
+
+    }
+
+    function getEnrolmentByClassGender($class_id, $session_id, $gender){
+
+        $result = $this->find('all', array('conditions'=>array('StdEnrolment.class_id'=>$class_id, 'StdEnrolment.session_id'=>$session_id, 'StdEnrolment.sex'=>$gender)));
+        return $result;
+
+    }
+
+    function getSchoolEnrolmentsBySession($school_id, $session_id){
+
+        $result = $this->find('all', array('conditions'=>array('StdEnrolment.school_id'=>$school_id, 'StdEnrolment.session_id'=>$session_id)));
         return $result;
 
     }
