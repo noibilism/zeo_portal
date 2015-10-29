@@ -76,6 +76,9 @@ class EnrolmentsController extends AppController {
 
     public function school_enrolments(){
         $sch_sessions = $this->SchSession->find('all');
+        $classes = $this->SchClass->find('all');
+        $this->set('sch_sessions', $sch_sessions);
+        $this->set('classes', $classes);
     }
 }
 
