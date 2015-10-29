@@ -36,15 +36,17 @@ class EnrolmentsController extends AppController {
             $data_count = count($data);
             $real_data = $data_count - 1;
             for($i = 1; $i < $data_count; $i++){
-                $this->request->data['StdEnrolment']['student_id'] = $data[$i][0];
-                $this->request->data['StdEnrolment']['sex'] = $sch_id;
-                $this->request->data['StdEnrolment']['session_id'] = $data[$i][1];
-                $this->request->data['StdEnrolment']['class_id'] = $data[$i][2];
+                $pin = $data[$i][0];
+                $student = $this->Student->findByPin($pin);
+                $this->request->data['StdEnrolment']['student_id'] = $student['id'];
+                $this->request->data['StdEnrolment']['sex'] = $student['sex'];
+                $this->request->data['StdEnrolment']['session_id'] = $curr_session['SchSession']['id'];
+                $this->request->data['StdEnrolment']['class_id'] = $this->request->data['Enrolment']['class_id'];
                 $this->request->data['StdEnrolment']['year'] = date('Y');
                 $this->request->data['StdEnrolment']['added_by'] = $user_id;
                 $this->request->data['StdEnrolment']['school_id'] = $sch_id;
                 $this->request->data['StdEnrolment']['school_type_id'] = $sch_type;
-                $this->Student->saveAll($this->request->data);
+                $this->StdEnrolment->saveAll($this->request->data);
             }
             unlink($file);
             $this->Session->setFlash(__($real_data.' Uploads Successful!'));

@@ -23,6 +23,7 @@
 <tr>
     <th class="text-center"></th>
     <th>Student Name</th>
+    <th>Portal Identification No</th>
     <th class="hidden-xs">Day or Boarding</th>
     <th class="hidden-xs" style="width: 15%;">Sex</th>
     <th class="hidden-xs" style="width: 15%;">Age</th>
@@ -43,6 +44,7 @@
 <tr>
     <td class="text-center"><?php echo $i++; ?></td>
     <td class="font-w600"><?php echo $student['name']; ?></td>
+    <td class="font-w600"><?php echo $student['pin']; ?></td>
     <td class="hidden-xs"><?php echo $student['day_boarding']; ?></td>
     <td class="font-w600"><?php echo $student['sex']; ?></td>
     <td class="hidden-xs"><?php echo $age->format("%Y"); ?> Years</td>
