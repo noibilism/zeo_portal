@@ -35,12 +35,14 @@
     <td class="hidden-xs"><?php if($c_s == 1){ echo 'Yes'; }else{ echo 'No'; }  ?></td>
     <td class="hidden-xs"><?php echo $this->Time->niceShort($ses['SchSession']['enrolment_start']); ?></td>
     <td class="hidden-xs"><?php echo $this->Time->niceShort($ses['SchSession']['enrolment_stop']); ?></td>
+    <?php if($role == 1){ ?>
     <td class="text-center">
         <div class="btn-group">
             <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Edit Session"><?php echo $this->Html->image('edit.png', array('url' => array('controller'=>'users', 'action'=>'update_session',$ses['SchSession']['id']))); ?></button>
             <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove Session"><?php echo $this->Html->image('del.png', array('url' => array('controller'=>'users', 'action'=>'delete_session',$ses['SchSession']['id']))); ?></button>
         </div>
     </td>
+    <?php } ?>
 </tr>
 <?php } ?>
 </tbody>

@@ -38,8 +38,22 @@ class EnrolmentsController extends AppController {
             for($i = 1; $i < $data_count; $i++){
                 $pin = $data[$i][0];
                 $student = $this->Student->findByPin($pin);
-                $this->request->data['StdEnrolment']['student_id'] = $student['id'];
-                $this->request->data['StdEnrolment']['sex'] = $student['sex'];
+                $check_duplicate = $this->check_duplicate_enrolment($student['Student']['id'], $curr_session['SchSession']['id']);
+                if(empty($student)){
+                    unlink($file);
+                    $this->Session->setFlash(__($pin.' Incorrect on Row '.$i));
+                    $this->redirect($this->referer());
+                }elseif($student['Student']['name'] !== $data[$i][1]){
+                    unlink($file);
+                    $this->Session->setFlash(__(' The portal identification number '.$pin.' doesnot match the name '.$data[$i][1].' on Row '.$i));
+                    $this->redirect($this->referer());
+                }elseif(!empty($check_duplicate)){
+                    unlink($file);
+                    $this->Session->setFlash(__(' The student with portal identification number '.$pin.' and the name '.$data[$i][1].' has been enroled before.Please check Row '.$i));
+                    $this->redirect($this->referer());
+                }
+                $this->request->data['StdEnrolment']['student_id'] = $student['Student']['id'];
+                $this->request->data['StdEnrolment']['sex'] = $student['Student']['sex'];
                 $this->request->data['StdEnrolment']['session_id'] = $curr_session['SchSession']['id'];
                 $this->request->data['StdEnrolment']['class_id'] = $this->request->data['Enrolment']['class_id'];
                 $this->request->data['StdEnrolment']['year'] = date('Y');
@@ -50,9 +64,18 @@ class EnrolmentsController extends AppController {
             }
             unlink($file);
             $this->Session->setFlash(__($real_data.' Uploads Successful!'));
-            $this->redirect(array('action' => 'school_students'));
+            $this->redirect(array('action' => 'school_enrolments'));
         }
 
+    }
+
+    public function check_duplicate_enrolment($student_id, $session){
+        $result = $this->StdEnrolment->findByStudentIdAndSessionId($student_id, $session);
+        return $result;
+    }
+
+    public function school_enrolments(){
+        $sch_sessions = $this->SchSession->find('all');
     }
 }
 
