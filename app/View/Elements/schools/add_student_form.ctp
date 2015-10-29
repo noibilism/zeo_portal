@@ -16,13 +16,21 @@
     </div>
     <div class="block-content">
             <?php echo $this->Form->create('Student', array('class'=>'form-horizontal push-5-t'));?>
-        <?php if($curr == 'add_students'){ ?>
+        <?php if($curr == 'add_student'){ ?>
         <div class="form-group">
             <label class="col-xs-12" for="register1-username">Portal Identification Number</label>
             <div class="col-xs-12">
                 <?php echo $this->Form->input('pin', array('class'=>'form-control', 'label'=>false,'value'=>$pin, 'readonly'=>'readonly')); ?>
             </div>
         </div>
+        <?php }else{ ?>
+        <div class="form-group">
+            <label class="col-xs-12" for="register1-username">Portal Identification Number</label>
+            <div class="col-xs-12">
+                <?php echo $this->Form->input('pin', array('class'=>'form-control', 'label'=>false,'readonly'=>'readonly')); ?>
+            </div>
+        </div>
+        <?php } ?>
             <div class="form-group">
                 <label class="col-xs-12" for="register1-username">Student Name</label>
                 <div class="col-xs-12">

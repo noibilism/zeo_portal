@@ -57,6 +57,12 @@
                                             School Type
                                         </td>
                                         <td>
+                                            Male
+                                        </td>
+                                        <td>
+                                            Female
+                                        </td>
+                                        <td>
                                             Total Enrolments
                                         </td>
                                     </tr>
@@ -65,6 +71,8 @@
                                         <td class="font-w600">
                                             <a href="javascript:void(0)"><?php echo $sch_type['SchoolType']['name']; ?></a>
                                         </td>
+                                        <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getSchoolEnrolmentsByTypeGender',$sch_type['SchoolType']['id'],'M')));?></td>
+                                        <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getSchoolEnrolmentsByTypeGender',$sch_type['SchoolType']['id'],'F')));?></td>
                                         <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getSchoolEnrolmentsByType',$sch_type['SchoolType']['id'])));?></td>
                                     </tr>
                                     <?php } ?>
@@ -163,6 +171,12 @@
                                             Class
                                         </td>
                                         <td>
+                                            Male
+                                        </td>
+                                        <td>
+                                            Female
+                                        </td>
+                                        <td>
                                             No of Students Enrolled
                                         </td>
                                     </tr>
@@ -171,6 +185,8 @@
                                         <td class="font-w600">
                                             <a href="javascript:void(0)"><?php echo $class['SchClass']['name']?></a>
                                         </td>
+                                        <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getEnrolmentByClassGender',$class['SchClass']['id'],'M')));?></td>
+                                        <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getEnrolmentByClassGender',$class['SchClass']['id'],'F')));?></td>
                                         <td class="font-w600 text-success text-right" style="width: 70px;"><?php echo count($this->requestAction(array('controller' => 'Schools','action' => 'getEnrolmentByClass',$class['SchClass']['id'])));?></td>
                                     </tr>
                                     <?php } ?>
