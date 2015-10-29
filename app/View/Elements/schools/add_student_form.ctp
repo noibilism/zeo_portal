@@ -16,6 +16,7 @@
     </div>
     <div class="block-content">
             <?php echo $this->Form->create('Student', array('class'=>'form-horizontal push-5-t'));?>
+        <?php if($curr == 'add_students'){ ?>
         <div class="form-group">
             <label class="col-xs-12" for="register1-username">Portal Identification Number</label>
             <div class="col-xs-12">

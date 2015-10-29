@@ -395,6 +395,7 @@ class SchoolsController extends AppController {
             $real_data = $data_count - 1;
             for($i = 1; $i < $data_count; $i++){
                 $this->request->data['Student']['name'] = $data[$i][0];
+                $this->request->data['Student']['pin'] = $this->portalNo(10);
                 $this->request->data['Student']['school_id'] = $sch_id;
                 $this->request->data['Student']['day_boarding'] = $data[$i][1];
                 $this->request->data['Student']['sex'] = $data[$i][2];
