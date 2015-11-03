@@ -46,6 +46,7 @@
             <?php } ?>
         </div>
     </td>
+    <?php } ?>
 </tr>
 <?php } ?>
 </tbody>

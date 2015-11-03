@@ -76,7 +76,8 @@ class EnrolmentsController extends AppController {
 
     public function school_enrolments($session_id = null){
         if(!$session_id){
-            $ses = $this->SchSession->getCurrentSession();
+            $ses_ = $this->SchSession->getCurrentSession();
+            $ses = $ses_['SchSession']['id'];
         }else{
             $ses = $session_id;
         }
