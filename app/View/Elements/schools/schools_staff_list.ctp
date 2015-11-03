@@ -28,17 +28,17 @@
 ?>
 <tr>
     <td class="text-center"><?php echo $i++; ?></td>
-    <td class="font-w600"><?php echo $school['name']; ?></td>
-    <td class="hidden-xs"><?php echo $school['type']; ?></td>
-    <td class="hidden-xs"><?php echo $school['qualification']; ?></td>
-    <td class="hidden-xs"><?php echo $school['discipline']; ?></td>
-    <td class="hidden-xs"><?php echo $school['year_acquired']; ?></td>
-    <td class="hidden-xs"><?php echo $school['email']; ?></td>
-    <td class="hidden-xs"><?php echo $school['phone']; ?></td>
+    <td class="font-w600"><?php echo $school['SchoolStaff']['name']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['type']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['qualification']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['discipline']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['year_acquired']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['email']; ?></td>
+    <td class="hidden-xs"><?php echo $school['SchoolStaff']['phone']; ?></td>
     <td class="text-center">
         <div class="btn-group">
-            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Edit School Personnel"><?php echo $this->Html->image('edit.png', array('url' => array('controller'=>'schools', 'action'=>'update_school_staff',$school['id']))); ?></button>
-            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove School Personnel"><?php echo $this->Html->image('del.png', array('url' => array('controller'=>'schools', 'action'=>'delete_school_staff',$school['id']))); ?></button>
+            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Edit School Personnel"><?php echo $this->Html->image('edit.png', array('url' => array('controller'=>'schools', 'action'=>'update_school_staff',$school['SchoolStaff']['id']))); ?></button>
+            <button class="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="Remove School Personnel"><?php echo $this->Html->image('del.png', array('url' => array('controller'=>'schools', 'action'=>'delete_school_staff',$school['SchoolStaff']['id']))); ?></button>
         </div>
     </td>
 </tr>

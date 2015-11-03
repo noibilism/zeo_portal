@@ -214,7 +214,7 @@ class SchoolsController extends AppController {
 
         $user_id = $this->Auth->user('id');
         $basic = $this->School->findByUserId($user_id);
-        $staffs = $this->SchoolStaff->findBySchoolId($basic['School']['id']);
+        $staffs = $this->SchoolStaff->find('all',array('SchoolStaff.school_id'=>$basic['School']['id']));
         $payments = $this->SchoolPayment->findBySchoolId($basic['School']['id']);
         $property = $this->SchoolProperty->findBySchoolId($basic['School']['id']);
         $this->set('basic', $basic);
